@@ -17,7 +17,7 @@ if __name__ == '__main__':
     else:
         with open(sys.argv[1], "r") as r:
             with open(sys.argv[2], "w") as w:
-                start_ul, start_ol = False, False
+                start_ul, start_ol, start_p = False, False, False
                 for line in r:
                     length = len(line)
                     heading_content = line.lstrip('#')
@@ -26,6 +26,7 @@ if __name__ == '__main__':
                     unordered_nbr = length - len(unordered_content)
                     ordered_content = line.lstrip('*')
                     ordered_nbr = length - len(ordered_content)
+
                     # headings
                     if heading_nbr in range(1, 6):
                         html_line = '<h{}>{}</h{}>\n'.format(
@@ -57,12 +58,30 @@ if __name__ == '__main__':
                         w.write('</ol>\n')
                         start_ol = False
 
-                # close of Unordered Listing
+                    # Simple text
+                    if not (heading_nbr or start_ul or start_ol):
+                        print(length)
+                        if length > 1 and not start_p:
+                            w.write('<p>\n')
+                            w.write("{}\n".format(line.strip()))
+                            start_p = True
+                        elif length > 1 and start_p:
+                            w.write("<br/>\n")
+                            w.write("{}\n".format(line.strip()))
+                        if length == 1:
+                            w.write('</p>\n')
+                            start_p = False
+
+                # close Unordered Listing
                 if start_ul:
                     w.write('</ul>\n')
 
-                # close of Ordered Listing
+                # close Ordered Listing
                 if start_ol:
                     w.write('</ol>\n')
+
+                # close paragraph
+                if start_p:
+                    w.write('</p>\n')
 
         exit(0)
