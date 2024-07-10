@@ -20,6 +20,13 @@ if __name__ == '__main__':
             with open(sys.argv[2], "w") as w:
                 start_ul, start_ol, start_p = False, False, False
                 for line in r:
+
+                    # Bold and emphasis text
+                    line = line.replace("**", "<b>", 1)
+                    line = line.replace("**", "</b>", 1)
+                    line = line.replace("__", "<em>", 1)
+                    line = line.replace("__", "</em>", 1)
+
                     length = len(line)
                     heading_content = line.lstrip('#')
                     heading_nbr = length - len(heading_content)
@@ -27,10 +34,6 @@ if __name__ == '__main__':
                     unordered_nbr = length - len(unordered_content)
                     ordered_content = line.lstrip('*')
                     ordered_nbr = length - len(ordered_content)
-                    bold_content = line.lstrip('*')
-                    bold_nbr = length - len(bold_content)
-                    emphasis_content = line.lstrip('_')
-                    emphasis_nbr = length - len(emphasis_content)
 
                     # headings
                     if heading_nbr in range(1, 6):
@@ -77,8 +80,7 @@ if __name__ == '__main__':
                         start_ol = False
 
                     # Simple text
-                    if not (heading_nbr or start_ul or start_ol
-                            or bold_nbr or emphasis_nbr):
+                    if not (heading_nbr or start_ul or start_ol):
                         if length > 1 and not start_p:
                             w.write('<p>\n')
                             w.write("{}\n".format(line.strip()))
@@ -89,17 +91,6 @@ if __name__ == '__main__':
                         if length == 1 and start_p:
                             w.write('</p>\n')
                             start_p = False
-
-                    # Bold and emphasis text
-                    if bold_nbr and bold_nbr > 1:
-                        b_tag = line.replace("**", "<b>", 1)
-                        b_tag = b_tag.replace("**", "</b>", 1)
-                        w.write(b_tag)
-
-                    if emphasis_nbr and emphasis_nbr > 1:
-                        em_tag = line.replace("__", "<em>", 1)
-                        em_tag = em_tag.replace("__", "</em>", 1)
-                        w.write(em_tag)
 
                 # close Unordered Listing
                 if start_ul:
@@ -115,9 +106,4 @@ if __name__ == '__main__':
                 if start_p:
                     w.write('</p>\n')
                     start_p = False
-
-                # close bold tag
-                if start_b:
-                    w.write(line.replace("**", "</b>", 1))
-                    start_b = False
         exit(0)
