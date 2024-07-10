@@ -30,16 +30,19 @@ if __name__ == '__main__':
                     line = line.replace("__", "</em>", 1)
 
                     # convert in MD5 (lowercase)
-                    if re.findall(r'\[\[.+?\]\]', line):
-                        md5 = re.findall(r'\[\[.+?\]\]', line)[0]
-                        md5_content = re.findall(r'\[\[(.+?)\]\]', line)
-                        line = line.replace(md5, hashlib.md5(
-                            md5_content[0].encode()).hexdigest())
+                    md5 = re.findall(r'\[\[.+?\]\]', line)
+                    md5_inside = re.findall(r'\[\[(.+?)\]\]', line)
+                    if md5:
+                        line = line.replace(md5[0], hashlib.md5(
+                            md5_inside[0].encode()).hexdigest())
 
                     # Remove all c (case insensitive)
-                    if re.findall(r'\(\(.+?\)\)', line):
-                        content = re.findall(r'\(\((.+?)\)\)', line)[0]
-                        line = content.replace('c', '', 1).replace('C', '', 1)
+                    remove_letter_c = re.findall(r'\(\(.+?\)\)', line)
+                    remove_c_more = re.findall(r'\(\((.+?)\)\)', line)
+                    if remove_letter_c:
+                        remove_c_more = ''.join(
+                            c for c in remove_c_more[0] if c not in 'Cc')
+                        line = line.replace(remove_letter_c[0], remove_c_more)
 
                     length = len(line)
                     heading_content = line.lstrip('#')
