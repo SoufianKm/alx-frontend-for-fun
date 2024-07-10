@@ -2,6 +2,7 @@
 """ A script markdown2html.py that takes an argument 2 strings """
 import sys
 import os.path
+import re
 
 
 if __name__ == '__main__':
@@ -29,13 +30,26 @@ if __name__ == '__main__':
 
                     # headings
                     if heading_nbr in range(1, 6):
+                        # close Unordered Listing
+                        if start_ul:
+                            w.write('</ul>\n')
+                            start_ul = False
+                        # close Ordered Listing
+                        if start_ol:
+                            w.write('</ol>\n')
+                            start_ol = False
+                        # close paragraph
+                        if start_p:
+                            w.write('</p>\n')
+                            start_p = False
+
                         html_line = '<h{}>{}</h{}>\n'.format(
                                 heading_nbr, heading_content.strip(),
                                 heading_nbr)
                         w.write(html_line)
 
                     # Unordered Listing
-                    if unordered_nbr:
+                    if unordered_nbr and unordered_nbr == 1:
                         if not start_ul:
                             w.write('<ul>\n')
                             start_ul = True
@@ -47,7 +61,7 @@ if __name__ == '__main__':
                         start_ul = False
 
                     # Ordered Listing
-                    if ordered_nbr:
+                    if ordered_nbr and ordered_nbr == 1:
                         if not start_ol:
                             w.write('<ol>\n')
                             start_ol = True
@@ -60,7 +74,6 @@ if __name__ == '__main__':
 
                     # Simple text
                     if not (heading_nbr or start_ul or start_ol):
-                        print(length)
                         if length > 1 and not start_p:
                             w.write('<p>\n')
                             w.write("{}\n".format(line.strip()))
@@ -68,20 +81,23 @@ if __name__ == '__main__':
                         elif length > 1 and start_p:
                             w.write("<br/>\n")
                             w.write("{}\n".format(line.strip()))
-                        if length == 1:
+                        if length == 1 and start_p:
                             w.write('</p>\n')
                             start_p = False
 
                 # close Unordered Listing
                 if start_ul:
                     w.write('</ul>\n')
+                    start_ul = False
 
                 # close Ordered Listing
                 if start_ol:
                     w.write('</ol>\n')
+                    start_ol = False
 
                 # close paragraph
                 if start_p:
                     w.write('</p>\n')
+                    start_p = False
 
         exit(0)
