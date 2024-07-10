@@ -27,6 +27,10 @@ if __name__ == '__main__':
                     unordered_nbr = length - len(unordered_content)
                     ordered_content = line.lstrip('*')
                     ordered_nbr = length - len(ordered_content)
+                    bold_content = line.lstrip('*')
+                    bold_nbr = length - len(bold_content)
+                    emphasis_content = line.lstrip('_')
+                    emphasis_nbr = length - len(emphasis_content)
 
                     # headings
                     if heading_nbr in range(1, 6):
@@ -73,7 +77,8 @@ if __name__ == '__main__':
                         start_ol = False
 
                     # Simple text
-                    if not (heading_nbr or start_ul or start_ol):
+                    if not (heading_nbr or start_ul or start_ol
+                            or bold_nbr or emphasis_nbr):
                         if length > 1 and not start_p:
                             w.write('<p>\n')
                             w.write("{}\n".format(line.strip()))
@@ -84,6 +89,17 @@ if __name__ == '__main__':
                         if length == 1 and start_p:
                             w.write('</p>\n')
                             start_p = False
+
+                    # Bold and emphasis text
+                    if bold_nbr and bold_nbr > 1:
+                        b_tag = line.replace("**", "<b>", 1)
+                        b_tag = b_tag.replace("**", "</b>", 1)
+                        w.write(b_tag)
+
+                    if emphasis_nbr and emphasis_nbr > 1:
+                        em_tag = line.replace("__", "<em>", 1)
+                        em_tag = em_tag.replace("__", "</em>", 1)
+                        w.write(em_tag)
 
                 # close Unordered Listing
                 if start_ul:
@@ -100,4 +116,8 @@ if __name__ == '__main__':
                     w.write('</p>\n')
                     start_p = False
 
+                # close bold tag
+                if start_b:
+                    w.write(line.replace("**", "</b>", 1))
+                    start_b = False
         exit(0)
