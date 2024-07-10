@@ -6,6 +6,7 @@ import re
 
 
 if __name__ == '__main__':
+    """Check if number of arguments is less than 2"""
     if len(sys.argv) < 2:
         print("Usage: ./markdown2html.py README.md README.html",
               file=sys.stderr)
@@ -16,8 +17,13 @@ if __name__ == '__main__':
         print("Missing {}".format(sys.argv[1]), file=sys.stderr)
         exit(1)
     else:
+        html_filename = ""
+        if sys.argv[2] and sys.argv[2].endswith(".html"):
+            html_filename = sys.argv[2]
+        else:
+            html_filename = "{}.html".format(sys.argv[1].split('.')[0])
         with open(sys.argv[1], "r") as r:
-            with open(sys.argv[2], "w") as w:
+            with open(html_filename, "w") as w:
                 start_ul, start_ol, start_p = False, False, False
                 for line in r:
                     length = len(line)
