@@ -2,6 +2,8 @@
 """ A script markdown2html.py that takes an argument 2 strings """
 import sys
 import os.path
+import re
+import hashlib
 
 
 if __name__ == '__main__':
@@ -26,6 +28,18 @@ if __name__ == '__main__':
                     line = line.replace("**", "</b>", 1)
                     line = line.replace("__", "<em>", 1)
                     line = line.replace("__", "</em>", 1)
+
+                    # convert in MD5 (lowercase)
+                    if re.findall(r'\[\[.+?\]\]', line):
+                        md5 = re.findall(r'\[\[.+?\]\]', line)[0]
+                        md5_content = re.findall(r'\[\[(.+?)\]\]', line)
+                        line = line.replace(md5, hashlib.md5(
+                            md5_content[0].encode()).hexdigest())
+
+                    # Remove all c (case insensitive)
+                    if re.findall(r'\(\(.+?\)\)', line):
+                        content = re.findall(r'\(\((.+?)\)\)', line)[0]
+                        line = content.replace('c', '', 1).replace('C', '', 1)
 
                     length = len(line)
                     heading_content = line.lstrip('#')
