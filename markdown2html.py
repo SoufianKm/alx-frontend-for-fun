@@ -59,7 +59,7 @@ if __name__ == '__main__':
                         if not start_ul:
                             w.write('<ul>\n')
                             start_ul = True
-                        html_line = '<li>{}<li>\n'.format(
+                        html_line = '<li>{}</li>\n'.format(
                                 unordered_content.strip())
                         w.write(html_line)
                     if start_ul and not unordered_nbr:
@@ -71,7 +71,7 @@ if __name__ == '__main__':
                         if not start_ol:
                             w.write('<ol>\n')
                             start_ol = True
-                        html_line = '<li>{}<li>\n'.format(
+                        html_line = '<li>{}</li>\n'.format(
                                 ordered_content.strip())
                         w.write(html_line)
                     if start_ol and not ordered_nbr:
