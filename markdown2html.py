@@ -53,7 +53,7 @@ if __name__ == '__main__':
                     ordered_nbr = length - len(ordered_content)
 
                     # headings
-                    if heading_nbr in range(1, 6):
+                    if heading_nbr in range(1, 7):
                         # close Unordered Listing
                         if start_ul:
                             w.write('</ul>\n')
