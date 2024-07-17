@@ -249,7 +249,7 @@
   .header-container {
     display: flex;
     justify-content: space-between;
-    align-item: center;
+    align-items: center;
   }
 
   .header {
