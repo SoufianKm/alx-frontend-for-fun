@@ -343,10 +343,8 @@
       ============================= */
   
   .section-hero {
-    background-position: 75% 0;
-    background-repeat: no-repeat;
-    background-size: 90rem auto;
-    background-color: #010101;
+    position: relative;
+    margin-top: -8.5rem;
   }
   
   .section-hero .section-title {
@@ -368,13 +366,11 @@
   }
 
   .hero-homepage {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    min-height: 50vh;
+    background-position: 75% 0;
+    background-repeat: no-repeat;
+    background-size: 90rem auto;
+    background-color: #010101;
   }
-
 
   /* Section Latest news ============================= */
 
